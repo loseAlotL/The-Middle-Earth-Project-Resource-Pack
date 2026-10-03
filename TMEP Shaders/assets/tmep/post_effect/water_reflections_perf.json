@@ -1,0 +1,1103 @@
+{
+    "targets": {
+        "reflection": {},
+        "swap": {},
+        "sky_probe": {
+            "width": 128,
+            "height": 32,
+            "persistent": true
+        },
+        "sky_probe_next": {
+            "width": 128,
+            "height": 32
+        },
+        "atmosphere": {},
+        "graded": {},
+        "cloud_buffer": {
+            "width": 960,
+            "height": 480
+        },
+        "cloud_soft": {
+            "width": 960,
+            "height": 480
+        },
+        "cloud_history": {
+            "width": 960,
+            "height": 480,
+            "persistent": true
+        },
+        "camera_history": {
+            "width": 64,
+            "height": 1,
+            "persistent": true
+        },
+        "wetness": {
+            "width": 2,
+            "height": 1,
+            "persistent": true
+        },
+        "wetness_next": {
+            "width": 2,
+            "height": 1
+        },
+        "atmosphere_wet": {},
+        "exposure_grid": {
+            "width": 64,
+            "height": 32
+        },
+        "exposure": {
+            "width": 1,
+            "height": 1,
+            "persistent": true
+        },
+        "exposure_next": {
+            "width": 1,
+            "height": 1
+        },
+        "none": {
+            "width": 1,
+            "height": 1
+        },
+        "shadow_mask": {},
+        "lit": {},
+        "underwater": {},
+        "heat_a": {
+            "width": 256,
+            "height": 144
+        },
+        "heat_b": {
+            "width": 256,
+            "height": 144
+        },
+        "params": {
+            "width": 17,
+            "height": 1,
+            "persistent": true
+        },
+        "params_next": {
+            "width": 17,
+            "height": 1
+        },
+        "seamed": {}
+    },
+    "passes": [
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/params",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                },
+                {
+                    "sampler_name": "Previous",
+                    "target": "params"
+                }
+            ],
+            "output": "params_next"
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "params_next"
+                }
+            ],
+            "output": "params",
+            "uniforms": {
+                "BlitConfig": [
+                    {
+                        "name": "ColorModulate",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "tmep:post/camera_quad",
+            "fragment_shader": "tmep:post/shadows",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                },
+                {
+                    "sampler_name": "Height",
+                    "target": "none"
+                }
+            ],
+            "output": "shadow_mask",
+            "uniforms": {
+                "ShadowConfig": [
+                    {
+                        "name": "Occlusion",
+                        "type": "vec4",
+                        "value": [
+                            8.0,
+                            0.7,
+                            0.55,
+                            64.0
+                        ]
+                    },
+                    {
+                        "name": "SunShadow",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            48.0,
+                            0.42,
+                            0.8
+                        ]
+                    },
+                    {
+                        "name": "Extra",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            3.5,
+                            0.45,
+                            0.8
+                        ]
+                    },
+                    {
+                        "name": "Terrain",
+                        "type": "vec4",
+                        "value": [
+                            32.0,
+                            96.0,
+                            1.0,
+                            0.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/shadow_apply",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                },
+                {
+                    "sampler_name": "Mask",
+                    "target": "shadow_mask"
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                },
+                {
+                    "sampler_name": "CloudShadow",
+                    "target": "none"
+                },
+                {
+                    "sampler_name": "Bounce",
+                    "target": "none"
+                }
+            ],
+            "output": "lit",
+            "uniforms": {
+                "ShadowConfig": [
+                    {
+                        "name": "Occlusion",
+                        "type": "vec4",
+                        "value": [
+                            8.0,
+                            0.7,
+                            0.55,
+                            64.0
+                        ]
+                    },
+                    {
+                        "name": "SunShadow",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            48.0,
+                            0.42,
+                            0.8
+                        ]
+                    },
+                    {
+                        "name": "Extra",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            3.5,
+                            0.45,
+                            0.8
+                        ]
+                    },
+                    {
+                        "name": "Terrain",
+                        "type": "vec4",
+                        "value": [
+                            32.0,
+                            96.0,
+                            1.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "Lighting",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            0.0,
+                            0.6,
+                            0.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/wetness",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "lit"
+                },
+                {
+                    "sampler_name": "Previous",
+                    "target": "wetness"
+                }
+            ],
+            "output": "wetness_next"
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "wetness_next"
+                }
+            ],
+            "output": "wetness",
+            "uniforms": {
+                "BlitConfig": [
+                    {
+                        "name": "ColorModulate",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "tmep:post/camera_quad",
+            "fragment_shader": "tmep:post/clouds",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "lit"
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                },
+                {
+                    "sampler_name": "History",
+                    "target": "cloud_history",
+                    "bilinear": true
+                },
+                {
+                    "sampler_name": "PreviousCamera",
+                    "target": "camera_history"
+                },
+                {
+                    "sampler_name": "Weather",
+                    "target": "wetness"
+                }
+            ],
+            "output": "cloud_buffer",
+            "uniforms": {
+                "SkyConfig": [
+                    {
+                        "name": "Clouds",
+                        "type": "vec4",
+                        "value": [
+                            6.0,
+                            1.0,
+                            0.9,
+                            0.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "cloud_buffer"
+                }
+            ],
+            "output": "cloud_history",
+            "uniforms": {
+                "BlitConfig": [
+                    {
+                        "name": "ColorModulate",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/camera_store",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "lit"
+                }
+            ],
+            "output": "camera_history"
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/cloud_blur",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "cloud_buffer",
+                    "bilinear": true
+                }
+            ],
+            "output": "cloud_soft"
+        },
+        {
+            "vertex_shader": "tmep:post/camera_quad",
+            "fragment_shader": "tmep:post/sky",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "lit"
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                },
+                {
+                    "sampler_name": "Cloud",
+                    "target": "cloud_soft",
+                    "bilinear": true
+                },
+                {
+                    "sampler_name": "Weather",
+                    "target": "wetness"
+                },
+                {
+                    "sampler_name": "Params",
+                    "target": "params_next"
+                }
+            ],
+            "output": "atmosphere",
+            "uniforms": {
+                "SkyConfig": [
+                    {
+                        "name": "Clouds",
+                        "type": "vec4",
+                        "value": [
+                            6.0,
+                            1.0,
+                            0.0,
+                            0.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "tmep:post/camera_quad",
+            "fragment_shader": "tmep:post/wet",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "atmosphere"
+                },
+                {
+                    "sampler_name": "Marker",
+                    "target": "lit"
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                },
+                {
+                    "sampler_name": "Probe",
+                    "target": "sky_probe",
+                    "bilinear": true
+                },
+                {
+                    "sampler_name": "Wetness",
+                    "target": "wetness_next"
+                }
+            ],
+            "output": "atmosphere_wet",
+            "uniforms": {
+                "WetConfig": [
+                    {
+                        "name": "Wet",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            0.8,
+                            0.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "tmep:post/camera_quad",
+            "fragment_shader": "tmep:post/sky_probe",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "atmosphere_wet"
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                },
+                {
+                    "sampler_name": "Probe",
+                    "target": "sky_probe"
+                }
+            ],
+            "output": "sky_probe_next",
+            "uniforms": {
+                "ProbeConfig": [
+                    {
+                        "name": "Probe",
+                        "type": "vec4",
+                        "value": [
+                            160.0,
+                            0.35,
+                            0.0,
+                            0.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "sky_probe_next"
+                }
+            ],
+            "output": "sky_probe",
+            "uniforms": {
+                "BlitConfig": [
+                    {
+                        "name": "ColorModulate",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "tmep:post/camera_quad",
+            "fragment_shader": "tmep:post/underwater",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "atmosphere_wet",
+                    "bilinear": true
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                },
+                {
+                    "sampler_name": "Probe",
+                    "target": "sky_probe_next",
+                    "bilinear": true
+                },
+                {
+                    "sampler_name": "Ripples",
+                    "location": "tmep:water_ripples",
+                    "width": 1024,
+                    "height": 1024,
+                    "bilinear": false
+                }
+            ],
+            "output": "underwater",
+            "uniforms": {
+                "UnderwaterConfig": [
+                    {
+                        "name": "Rays",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            16.0,
+                            40.0,
+                            1.0
+                        ]
+                    },
+                    {
+                        "name": "Murk",
+                        "type": "vec4",
+                        "value": [
+                            0.35,
+                            10.0,
+                            0.55,
+                            0.6
+                        ]
+                    },
+                    {
+                        "name": "Warp",
+                        "type": "vec4",
+                        "value": [
+                            2.5,
+                            1.0,
+                            1.0,
+                            0.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "tmep:post/camera_quad",
+            "fragment_shader": "tmep:post/water_reflections",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "underwater"
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                },
+                {
+                    "sampler_name": "Ripples",
+                    "location": "tmep:water_ripples",
+                    "width": 1024,
+                    "height": 1024,
+                    "bilinear": false
+                },
+                {
+                    "sampler_name": "Probe",
+                    "target": "sky_probe_next",
+                    "bilinear": true
+                }
+            ],
+            "output": "reflection",
+            "uniforms": {
+                "ReflectionConfig": [
+                    {
+                        "name": "Reflection",
+                        "type": "vec4",
+                        "value": [
+                            1.25,
+                            150.0,
+                            20.0,
+                            0.6
+                        ]
+                    },
+                    {
+                        "name": "Surface",
+                        "type": "vec4",
+                        "value": [
+                            0.6,
+                            0.08,
+                            40.0,
+                            1.0
+                        ]
+                    },
+                    {
+                        "name": "Sky",
+                        "type": "vec4",
+                        "value": [
+                            330.0,
+                            32.0,
+                            6.0,
+                            0.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "tmep:post/camera_quad",
+            "fragment_shader": "tmep:post/water_resolve",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "underwater"
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                },
+                {
+                    "sampler_name": "Reflection",
+                    "target": "reflection"
+                },
+                {
+                    "sampler_name": "Ripples",
+                    "location": "tmep:water_ripples",
+                    "width": 1024,
+                    "height": 1024,
+                    "bilinear": false
+                }
+            ],
+            "output": "swap",
+            "uniforms": {
+                "ResolveConfig": [
+                    {
+                        "name": "Glint",
+                        "type": "vec4",
+                        "value": [
+                            0.12,
+                            0.003,
+                            1.0,
+                            1.5
+                        ]
+                    },
+                    {
+                        "name": "Blur",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            0.0,
+                            0.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "tmep:post/camera_quad_camera",
+            "fragment_shader": "tmep:post/haze",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                },
+                {
+                    "sampler_name": "Camera",
+                    "target": "underwater"
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                },
+                {
+                    "sampler_name": "Params",
+                    "target": "params_next"
+                },
+                {
+                    "sampler_name": "Scene",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "graded",
+            "uniforms": {
+                "HazeConfig": [
+                    {
+                        "name": "Haze",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            0.0,
+                            6.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/seam",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "graded"
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                },
+                {
+                    "sampler_name": "Scene",
+                    "target": "minecraft:main"
+                }
+            ],
+            "output": "seamed"
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/exposure_grid",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "seamed"
+                }
+            ],
+            "output": "exposure_grid"
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/exposure_adapt",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "exposure_grid"
+                },
+                {
+                    "sampler_name": "Previous",
+                    "target": "exposure"
+                },
+                {
+                    "sampler_name": "Camera",
+                    "target": "underwater"
+                },
+                {
+                    "sampler_name": "Weather",
+                    "target": "wetness"
+                }
+            ],
+            "output": "exposure_next",
+            "uniforms": {
+                "ExposureConfig": [
+                    {
+                        "name": "Exposure",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            0.36,
+                            0.8,
+                            1.3
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "exposure_next"
+                }
+            ],
+            "output": "exposure",
+            "uniforms": {
+                "BlitConfig": [
+                    {
+                        "name": "ColorModulate",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/heat_down",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                }
+            ],
+            "output": "heat_a"
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/bloom_blur",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "heat_a",
+                    "bilinear": true
+                }
+            ],
+            "output": "heat_b",
+            "uniforms": {
+                "BlurConfig": [
+                    {
+                        "name": "Blur",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            0.0,
+                            5.0,
+                            0.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/bloom_blur",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "heat_b",
+                    "bilinear": true
+                }
+            ],
+            "output": "heat_a",
+            "uniforms": {
+                "BlurConfig": [
+                    {
+                        "name": "Blur",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            1.0,
+                            5.0,
+                            0.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "tmep:post/camera_quad_camera",
+            "fragment_shader": "tmep:post/grade",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "seamed"
+                },
+                {
+                    "sampler_name": "Bloom",
+                    "target": "none",
+                    "bilinear": true
+                },
+                {
+                    "sampler_name": "Camera",
+                    "target": "underwater"
+                },
+                {
+                    "sampler_name": "Height",
+                    "target": "none"
+                },
+                {
+                    "sampler_name": "Light",
+                    "target": "none",
+                    "bilinear": true
+                },
+                {
+                    "sampler_name": "Exposure",
+                    "target": "exposure_next"
+                },
+                {
+                    "sampler_name": "Heat",
+                    "target": "heat_a",
+                    "bilinear": true
+                },
+                {
+                    "sampler_name": "Params",
+                    "target": "params_next"
+                },
+                {
+                    "sampler_name": "Droplets",
+                    "location": "tmep:droplets",
+                    "width": 512,
+                    "height": 512,
+                    "bilinear": true
+                },
+                {
+                    "sampler_name": "Notice",
+                    "location": "tmep:notice_transparency",
+                    "width": 1024,
+                    "height": 220,
+                    "bilinear": true
+                },
+                {
+                    "sampler_name": "NoticeSmall",
+                    "location": "tmep:notice_transparency_small",
+                    "width": 768,
+                    "height": 88,
+                    "bilinear": true
+                }
+            ],
+            "output": "minecraft:main",
+            "uniforms": {
+                "GradeConfig": [
+                    {
+                        "name": "Bloom",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "Shadows",
+                        "type": "vec4",
+                        "value": [
+                            0.97,
+                            1.0,
+                            1.06,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "Highlights",
+                        "type": "vec4",
+                        "value": [
+                            1.06,
+                            1.0,
+                            0.92,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "Tone",
+                        "type": "vec4",
+                        "value": [
+                            0.4,
+                            0.06,
+                            0.2,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "Flare",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "Spill",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            0.0,
+                            1.0,
+                            0.45
+                        ]
+                    },
+                    {
+                        "name": "Dark",
+                        "type": "vec4",
+                        "value": [
+                            0.15,
+                            0.4,
+                            0.45,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "Golden",
+                        "type": "vec4",
+                        "value": [
+                            0.55,
+                            0.5,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "Rain",
+                        "type": "vec4",
+                        "value": [
+                            0.72,
+                            0.25,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "Heat",
+                        "type": "vec4",
+                        "value": [
+                            0.009,
+                            0.05,
+                            0.55,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "Drops",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            5.0,
+                            0.0
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

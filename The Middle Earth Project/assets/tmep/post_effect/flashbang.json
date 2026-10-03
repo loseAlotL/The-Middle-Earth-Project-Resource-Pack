@@ -1,6 +1,101 @@
 {
-  "targets": {},
+  "targets": {
+    "state": {
+      "width": 1,
+      "height": 1,
+      "persistent": true
+    },
+    "state_next": {
+      "width": 1,
+      "height": 1
+    },
+    "afterimage": {
+      "persistent": true
+    },
+    "afterimage_next": {},
+    "swap": {}
+  },
   "passes": [
+    {
+      "vertex_shader": "tmep:post/flashbang",
+      "fragment_shader": "tmep:post/flashbang_capture",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "minecraft:main"
+        },
+        {
+          "sampler_name": "Previous",
+          "target": "afterimage"
+        },
+        {
+          "sampler_name": "State",
+          "target": "state"
+        }
+      ],
+      "output": "afterimage_next"
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "minecraft:post/blit",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "afterimage_next"
+        }
+      ],
+      "output": "afterimage",
+      "uniforms": {
+        "BlitConfig": [
+          {
+            "name": "ColorModulate",
+            "type": "vec4",
+            "value": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "vertex_shader": "tmep:post/flashbang",
+      "fragment_shader": "tmep:post/flashbang_state",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "state"
+        }
+      ],
+      "output": "state_next"
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "minecraft:post/blit",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "state_next"
+        }
+      ],
+      "output": "state",
+      "uniforms": {
+        "BlitConfig": [
+          {
+            "name": "ColorModulate",
+            "type": "vec4",
+            "value": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          }
+        ]
+      }
+    },
     {
       "vertex_shader": "tmep:post/flashbang",
       "fragment_shader": "tmep:post/flashbang",
@@ -8,9 +103,66 @@
         {
           "sampler_name": "In",
           "target": "minecraft:main"
+        },
+        {
+          "sampler_name": "State",
+          "target": "state_next"
+        },
+        {
+          "sampler_name": "Afterimage",
+          "target": "afterimage_next"
         }
       ],
-      "output": "minecraft:main"
+      "output": "swap",
+      "uniforms": {
+        "FlashConfig": [
+          {
+            "name": "Timing",
+            "type": "vec4",
+            "value": [
+              0.25,
+              3.0,
+              0.55,
+              3.5
+            ]
+          },
+          {
+            "name": "Daze",
+            "type": "vec4",
+            "value": [
+              0.03,
+              0.02,
+              0.003,
+              0.8
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "minecraft:post/blit",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "swap"
+        }
+      ],
+      "output": "minecraft:main",
+      "uniforms": {
+        "BlitConfig": [
+          {
+            "name": "ColorModulate",
+            "type": "vec4",
+            "value": [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          }
+        ]
+      }
     }
   ]
 }

@@ -1,0 +1,142 @@
+{
+    "targets": {
+        "state": {
+            "width": 1,
+            "height": 1,
+            "persistent": true
+        },
+        "state_next": {
+            "width": 1,
+            "height": 1
+        },
+        "swap": {}
+    },
+    "passes": [
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/wraith_state",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "state"
+                }
+            ],
+            "output": "state_next"
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "state_next"
+                }
+            ],
+            "output": "state",
+            "uniforms": {
+                "BlitConfig": [
+                    {
+                        "name": "ColorModulate",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/wraith",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main",
+                    "bilinear": true
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                },
+                {
+                    "sampler_name": "State",
+                    "target": "state_next"
+                }
+            ],
+            "output": "swap",
+            "uniforms": {
+                "WraithConfig": [
+                    {
+                        "name": "Warp",
+                        "type": "vec4",
+                        "value": [
+                            0.012,
+                            0.09,
+                            0.35,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "Look",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            0.48,
+                            0.006,
+                            1.2
+                        ]
+                    },
+                    {
+                        "name": "Tint",
+                        "type": "vec4",
+                        "value": [
+                            0.96,
+                            0.98,
+                            1.0,
+                            0.72
+                        ]
+                    },
+                    {
+                        "name": "Smoke",
+                        "type": "vec4",
+                        "value": [
+                            0.45,
+                            0.035,
+                            1.35,
+                            0.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
+            "output": "minecraft:main",
+            "uniforms": {
+                "BlitConfig": [
+                    {
+                        "name": "ColorModulate",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

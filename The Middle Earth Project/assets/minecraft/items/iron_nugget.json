@@ -79,7 +79,14 @@
           ],
           "fallback": {
             "type": "minecraft:model",
-            "model": "tmep:item/rings/narya_ring_held"
+            "model": "tmep:item/rings/narya_ring_held",
+            "tints": [
+              {
+                "type": "minecraft:custom_model_data",
+                "index": 0,
+                "default": 16777215
+              }
+            ]
           }
         }
       },

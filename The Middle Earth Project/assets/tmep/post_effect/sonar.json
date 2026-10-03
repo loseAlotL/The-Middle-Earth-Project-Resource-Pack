@@ -1,0 +1,121 @@
+{
+    "targets": {
+        "state": {
+            "width": 1,
+            "height": 1,
+            "persistent": true
+        },
+        "state_next": {
+            "width": 1,
+            "height": 1
+        },
+        "swap": {}
+    },
+    "passes": [
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/sonar_state",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "state"
+                }
+            ],
+            "output": "state_next"
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "state_next"
+                }
+            ],
+            "output": "state",
+            "uniforms": {
+                "BlitConfig": [
+                    {
+                        "name": "ColorModulate",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "tmep:post/sonar",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                },
+                {
+                    "sampler_name": "State",
+                    "target": "state_next"
+                }
+            ],
+            "output": "swap",
+            "uniforms": {
+                "SonarConfig": [
+                    {
+                        "name": "Pulse",
+                        "type": "vec4",
+                        "value": [
+                            24.0,
+                            1.6,
+                            4.0,
+                            96.0
+                        ]
+                    },
+                    {
+                        "name": "Tint",
+                        "type": "vec4",
+                        "value": [
+                            0.35,
+                            0.85,
+                            1.0,
+                            0.8
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "vertex_shader": "minecraft:core/screenquad",
+            "fragment_shader": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
+            "output": "minecraft:main",
+            "uniforms": {
+                "BlitConfig": [
+                    {
+                        "name": "ColorModulate",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

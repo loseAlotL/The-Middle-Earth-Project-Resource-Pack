@@ -82,29 +82,29 @@
       "type": "bitmap",
       "file": "tmep:gui/mana/bar_empty.png",
       "chars": ["\uE200"],
-      "ascent": -30,
-      "height": 6
+      "ascent": -16,
+      "height": 9
     },
     {
       "type": "bitmap",
       "file": "tmep:gui/mana/fill_1.png",
       "chars": ["\uE201"],
-      "ascent": -30,
-      "height": 6
+      "ascent": -16,
+      "height": 9
     },
     {
       "type": "bitmap",
       "file": "tmep:gui/mana/fill_2.png",
       "chars": ["\uE202"],
-      "ascent": -30,
-      "height": 6
+      "ascent": -16,
+      "height": 9
     },
     {
       "type": "bitmap",
       "file": "tmep:gui/mana/fill_3.png",
       "chars": ["\uE203"],
-      "ascent": -30,
-      "height": 6
+      "ascent": -16,
+      "height": 9
     },
 
     {

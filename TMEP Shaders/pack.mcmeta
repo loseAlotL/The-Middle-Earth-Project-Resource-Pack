@@ -1,0 +1,20 @@
+{
+  "pack": {
+    "description": "§b FULL",
+    "min_format": [
+      97,
+      1
+    ],
+    "max_format": [
+      97,
+      1
+    ]
+  },
+  "sodium": {
+    "ignored_shaders": [
+      "fog.glsl",
+      "terrain.vsh",
+      "terrain.fsh"
+    ]
+  }
+}

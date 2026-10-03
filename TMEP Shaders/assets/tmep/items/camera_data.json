@@ -1,0 +1,78 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "tmep:item/camera_data",
+    "tints": [
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 0,
+        "default": 1296293
+      },
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 1,
+        "default": 1361829
+      },
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 2,
+        "default": 2097152
+      },
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 3,
+        "default": 2162688
+      },
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 4,
+        "default": 2228224
+      },
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 5,
+        "default": 2293760
+      },
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 6,
+        "default": 2359296
+      },
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 7,
+        "default": 2424832
+      },
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 8,
+        "default": 2490368
+      },
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 9,
+        "default": 2555904
+      },
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 10,
+        "default": 2621440
+      },
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 11,
+        "default": 2686976
+      },
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 12,
+        "default": 2752512
+      },
+      {
+        "type": "minecraft:custom_model_data",
+        "index": 13,
+        "default": 2818048
+      }
+    ]
+  }
+}

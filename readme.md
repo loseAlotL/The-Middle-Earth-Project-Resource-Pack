@@ -10,6 +10,11 @@ License: **CC BY-NC-SA 4.0**
 
 [Releases](https://github.com/loseAlotL/The-Middle-Earth-Project-Resource-Pack/releases)
 
+Youtube Video:
+https://www.youtube.com/watch?v=xMGOPqbWpTk&t=1s
+<img width="1366" height="768" alt="I Coded the ONE RING in Minecraft" src="https://github.com/user-attachments/assets/d00ec912-068e-42d1-8e21-839ede865dd7" />
+
+
 Example command:
 ```mcfunction
 /give @s minecraft:gold_nugget[minecraft:custom_model_data={strings:["tmep:one_ring"]}]
@@ -45,9 +50,4 @@ Example command:
 - Generic Staff 4 – `tmep:generic_4_staff`
 
 <img width="823" height="626" alt="image" src="https://github.com/user-attachments/assets/9a680391-a110-4085-9c4c-516115110633" />
-<img width="466" height="129" alt="image" src="https://github.com/user-attachments/assets/e38216c4-29d3-466e-b224-91c3febb8bed" />
 
-
-Current rings are from my other pack https://www.planetminecraft.com/texture-pack/lotring-pack/
-
-Hope to rework models and textures by `Release v1.0.6`

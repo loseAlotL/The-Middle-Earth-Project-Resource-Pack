@@ -1,0 +1,58 @@
+{
+  "ambient.beach": {
+    "category": "ambient",
+    "sounds": [ "tmep:background/beach" ]
+  },
+  "ambient.birds": {
+    "category": "ambient",
+    "sounds": [ "tmep:background/birds" ]
+  },
+  "ambient.blizzard": {
+    "category": "ambient",
+    "sounds": [ "tmep:background/blizzard" ]
+  },
+  "ambient.cave": {
+    "category": "ambient",
+    "sounds": [ "tmep:background/cave" ]
+  },
+  "ambient.crickets": {
+    "category": "ambient",
+    "sounds": [ "tmep:background/crickets" ]
+  },
+  "ambient.deep_cave": {
+    "category": "ambient",
+    "sounds": [ "tmep:background/deep_cave" ]
+  },
+  "ambient.desert": {
+    "category": "ambient",
+    "sounds": [ "tmep:background/desert" ]
+  },
+  "ambient.forest": {
+    "category": "ambient",
+    "sounds": [ "tmep:background/forest" ]
+  },
+  "ambient.heavy_rain": {
+    "category": "ambient",
+    "sounds": [ "tmep:background/heavy_rain" ]
+  },
+  "ambient.light_rain": {
+    "category": "ambient",
+    "sounds": [ "tmep:background/light_rain" ]
+  },
+  "ambient.night_bugs": {
+    "category": "ambient",
+    "sounds": [ "tmep:background/night_bugs" ]
+  },
+  "ambient.river": {
+    "category": "ambient",
+    "sounds": [ "tmep:background/river" ]
+  },
+  "ambient.wind": {
+    "category": "ambient",
+    "sounds": [ "tmep:background/wind" ]
+  },
+  "effect.flashbang": {
+    "category": "ambient",
+    "sounds": [ "tmep:effect/flashbang" ]
+  }
+}
